@@ -8,5 +8,5 @@ router.register('doc', views.DocumentViewSet)
 # urlpatterns = router.urls
 urlpatterns = [
     path('', include(router.urls)),
-    path('admin/', views.AdminFileUploadView.as_view())
+    path('admin/', views.AdminFileUploadView.as_view(),)
 ]

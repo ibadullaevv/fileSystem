@@ -13,6 +13,8 @@ class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all().order_by('-created')
     permission_classes = [permissions.IsAuthenticated]
 
+    # serializer_class = DocumentCreateSerializer
+
     def get_serializer_class(self):
         if self.action in ('list', 'retrieve', 'update', 'destroy'):
             return DocumentListSerializer
@@ -26,7 +28,20 @@ class DocumentViewSet(viewsets.ModelViewSet):
         if user.is_superuser:
             return Document.objects.all()
         else:
-            return Document.objects.filter(Q(sender=user) or Q(receiver=user))
+            return Document.objects.filter(Q(sender=self.request.user) or Q(receiver=self.request.user))
+
+    # def post(self, request, *args, **kwargs):
+    #     file = request.FILES.get('document')
+    #     if not file:
+    #         return Response({'error': 'No file provided'}, status=status.HTTP_400_BAD_REQUEST)
+    #     receiver = request.user
+    #     sender_id = request.data.get('sender_id')
+    #     if not sender_id:
+    #         return Response({'error': 'No sender provided'}, status=status.HTTP_400_BAD_REQUEST)
+    #     # sender = CustomUser.objects.get(id=sender_id)
+    #     sender = User.objects.get(id=sender_id)
+    #     new_file = Document.objects.create(title=file.title, document=file, sender=sender, receiver=receiver)
+    #     return Response(DocumentListSerializer(new_file).data, status=status.HTTP_201_CREATED)
 
 
 class AdminFileUploadView(APIView):

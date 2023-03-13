@@ -2,13 +2,13 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 from datetime import timedelta
+import dj_database_url
 
 env_path = ".env"
 load_dotenv(dotenv_path=env_path)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
@@ -20,7 +20,6 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 DEBUG = os.getenv('DEBUG') == 'True'
 
 ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS').split(',')
-
 
 # Application definition
 
@@ -70,21 +69,21 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'fileSystem.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
 if os.getenv("PRODUCTION") == 'True':
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": os.getenv("DB_NAME"),
-            "USER": os.getenv("DB_USER"),
-            "HOST": os.getenv("DB_HOST"),
-            "PORT": os.getenv("DB_PORT"),
-            "PASSWORD": os.getenv("DB_PASSWORD"),
-        }
-    }
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": "django.db.backends.postgresql",
+    #         "NAME": os.getenv("DB_NAME"),
+    #         "USER": os.getenv("DB_USER"),
+    #         "HOST": os.getenv("DB_HOST"),
+    #         "PORT": os.getenv("DB_PORT"),
+    #         "PASSWORD": os.getenv("DB_PASSWORD"),
+    #     }
+    # }
+    DATABASES = {'default': dj_database_url.parse(os.getenv('DATABASE_URL'))}
 else:
     DATABASES = {
         'default': {
@@ -92,7 +91,6 @@ else:
             'NAME': BASE_DIR / 'db.sqlite3',
         }
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -112,7 +110,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -123,7 +120,6 @@ TIME_ZONE = 'UTC'
 USE_I18N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
