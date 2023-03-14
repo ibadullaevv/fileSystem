@@ -10,6 +10,9 @@ class DocumentCreateSerializer(serializers.ModelSerializer):
 
 
 class DocumentListSerializer(serializers.ModelSerializer):
+    sender = serializers.CharField(source='sender.username', read_only=True)
+    receiver = serializers.CharField(source='receiver.username', read_only=True)
+
     class Meta:
         model = Document
         fields = ['id', 'title', 'document', 'description', 'sender', 'receiver', 'created']
