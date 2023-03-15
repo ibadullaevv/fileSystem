@@ -9,7 +9,7 @@ from .filters import DocumentFilter
 
 class DocumentViewSet(viewsets.ModelViewSet):
     queryset = Document.objects.all()
-    filterset_class = DocumentFilter
+    # filterset_class = DocumentFilter
 
     def get_serializer_class(self):
         if self.action == 'create':
@@ -21,7 +21,7 @@ class DocumentViewSet(viewsets.ModelViewSet):
             return Document.objects.all()
         else:
             return Document.objects.filter(
-                Q(sender=self.request.user) | Q(receiver=self.request.user)
+                Q(sender=self.request.user.id) | Q(receiver=self.request.user.id)
             )
 
     def perform_create(self, serializer):

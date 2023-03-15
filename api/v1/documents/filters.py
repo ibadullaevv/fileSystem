@@ -9,4 +9,4 @@ class DocumentFilter(rest_framework.FilterSet):
 
     class Meta:
         model = Document
-        fields = ['title', 'receiver']
+        fields = ['title']
